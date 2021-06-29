@@ -4,11 +4,9 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	ccloud "github.com/cgroschupp/go-client-confluent-cloud/confluentcloud"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
-	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -112,20 +110,20 @@ func apiKeyCreate(ctx context.Context, d *schema.ResourceData, meta interface{})
 		}
 
 		log.Printf("[INFO] Created API Key, waiting for it become usable")
-		stateConf := &resource.StateChangeConf{
-			Pending:      []string{"Pending"},
-			Target:       []string{"Ready"},
-			Refresh:      clusterReady(c, clusterID, accountID, key.Key, key.Secret),
-			Timeout:      300 * time.Second,
-			Delay:        10 * time.Second,
-			PollInterval: 5 * time.Second,
-			MinTimeout:   20 * time.Second,
-		}
+		// stateConf := &resource.StateChangeConf{
+		// 	Pending:      []string{"Pending"},
+		// 	Target:       []string{"Ready"},
+		// 	Refresh:      clusterReady(c, clusterID, accountID, key.Key, key.Secret),
+		// 	Timeout:      300 * time.Second,
+		// 	Delay:        10 * time.Second,
+		// 	PollInterval: 5 * time.Second,
+		// 	MinTimeout:   20 * time.Second,
+		// }
 
-		_, err = stateConf.WaitForStateContext(context.Background())
-		if err != nil {
-			return diag.FromErr(fmt.Errorf("Error waiting for API Key (%s) to be ready: %s", d.Id(), err))
-		}
+		// _, err = stateConf.WaitForStateContext(context.Background())
+		// if err != nil {
+		// 	return diag.FromErr(fmt.Errorf("Error waiting for API Key (%s) to be ready: %s", d.Id(), err))
+		// }
 	} else {
 		log.Printf("[ERROR] Could not create API key: %s", err)
 	}
